@@ -2,10 +2,6 @@ package main
 
 /*
 #include <stdio.h>
-
-void PutChar(char ch){
-	putchar(ch);
-}
 */
 import "C"
 import (
@@ -14,14 +10,12 @@ import (
 	"time"
 )
 
-var A, B, c float64
-var cubeWidth float64
+var A, B, c, cubeWidth, horizontalOffset float64
 var width, height int = 160, 44
 var zBuffer [160 * 44 * 4]float64
 var buffer [160 * 44]rune
-var backgrountASCIICode rune = ' '
+var backgrountASCIICode rune = '.'
 var distanceFromCam float64 = 100
-var horizontalOffset float64
 
 var incrementSpeed float64 = 0.8
 
@@ -48,7 +42,6 @@ func main() {
 				calculateSurface(cubeX, cubeWidth, cubeY, '+')
 			}
 		}
-		// Second
 		cubeWidth = 10
 		horizontalOffset = 1 * cubeWidth
 		for cubeX := -cubeWidth; cubeX < cubeWidth; cubeX += incrementSpeed {
@@ -61,7 +54,6 @@ func main() {
 				calculateSurface(cubeX, cubeWidth, cubeY, '+')
 			}
 		}
-		// Third
 		cubeWidth = 5
 		horizontalOffset = 8 * cubeWidth
 		for cubeX := -cubeWidth; cubeX < cubeWidth; cubeX += incrementSpeed {
@@ -74,17 +66,12 @@ func main() {
 				calculateSurface(cubeX, cubeWidth, cubeY, '+')
 			}
 		}
-
 		fmt.Print("\033[H")
 		for k := 0; k < width*height; k++ {
 			if k%width > 0 {
-
-				C.PutChar(C.char(buffer[k]))
-
+				C.putchar(C.int(buffer[k]))
 			} else if k%width == 0 {
-
-				C.PutChar(10)
-
+				C.putchar(C.int(10))
 			}
 		}
 		A += 0.005
